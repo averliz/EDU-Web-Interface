@@ -49,7 +49,7 @@ const BarChartComponent = ({ data }) => {
   let selectedRow = true;
   const handleClick = (dataPoint) => {
     // Do something when a bar is clicked
-    console.log(dataPoint);
+    // console.log(dataPoint);
   };
 
   const chartData = convertData(data)
