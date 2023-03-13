@@ -20,7 +20,17 @@ app.add_middleware(
 
 
 # Serve the raw data file
-@app.get("/api/raw-data")
+@app.get("/api/rest-raw-data")
+def get_raw_data():
+    # with open("/path/to/your/raw-data-file", "r") as f:
+    #     data = f.read()
+    # return data
+    file_path = "C:\\Users\\jimmy\\Documents\\GitHub\\FYP-App\\server\\rest_han_reg.raw"
+    json_string = util.convert_to_json(file_path)
+    return json_string
+
+
+@app.get("/api/rest-raw-data-2")
 def get_raw_data():
     # with open("/path/to/your/raw-data-file", "r") as f:
     #     data = f.read()

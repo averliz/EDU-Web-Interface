@@ -44,13 +44,17 @@ const App = () => {
             path="/dashboard"
             element={
               <div>
-                <ApiData />
+                <ApiData test={false} />
               </div>
             }
           />
           <Route
-            path="/tables"
-            element={<Table headers={tableHeaders} data={tableData} />}
+            path="/dashboard-test"
+            element={
+              <div>
+                <ApiData test={true} />
+              </div>
+            }
           />
           <Route path="/forms" element={<Form />} />
           <Route

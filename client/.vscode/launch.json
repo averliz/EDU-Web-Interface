@@ -5,11 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "chrome",
+            "name": "brave-debug",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "type": "chrome",
             "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}/client/src/"
+            "webRoot": "${workspaceFolder}",
+            "runtimeExecutable": "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
         }
     ]
 }

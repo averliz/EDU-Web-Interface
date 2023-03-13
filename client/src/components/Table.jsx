@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+
 import styled from "styled-components";
 import SubTable from "./SubTable";
 import BarChartComponent from "./BarChartComponent";
+import ChartComponent from "./ChartComponent";
+import Card from "./Card";
+import DataTable from "react-data-table-component";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -10,7 +13,7 @@ const TableContainer = styled.div`
   justify-content: space-between;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  padding: 0 1rem;
+  // padding: 0rem 1rem 0rem 0rem;
 `;
 
 const TableWrapper = styled.div`
@@ -30,15 +33,17 @@ const TableRow = styled.tr`
     background-color: #f8f9fa;
   }
   cursor: pointer;
-  &:hover {
+  &:focus {
     background-color: #105b72c2;
+  }
+  &:hover {
+    background-color: rgba(170, 210, 236, 0.6);
   }
 `;
 
 const TableData = styled.td`
   padding: 0.75rem;
-  // white-space: nowrap;
-  overflow: hidden;
+  overflow: clip;
   text-overflow: ellipsis;
   border-right: 1px solid #ddd;
   &:last-child {
@@ -47,11 +52,41 @@ const TableData = styled.td`
 `;
 
 const SubTableWrapper = styled.div`
-  width: 50%;
-  position: sticky;
-  top: 0;
-  padding: 0 0.5rem;
+  // margin: 1rem;
 `;
+
+const SubWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: sticky;
+`;
+
+const ChartWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 100%;
+`;
+
+const customStyles = {
+  rows: {
+    style: {
+      minHeight: "72px", // override the row height
+    },
+  },
+  headCells: {
+    style: {
+      paddingLeft: "8px", // override the cell padding for head cells
+      paddingRight: "8px",
+    },
+  },
+  cells: {
+    style: {
+      paddingLeft: "8px", // override the cell padding for data cells
+      paddingRight: "8px",
+    },
+  },
+};
 
 const Table = ({ headers, data, labels }) => {
   const [selectedRow, setSelectedRow] = useState(null);
@@ -65,7 +100,10 @@ const Table = ({ headers, data, labels }) => {
       const rowData = data[selectedRow];
       return (
         <SubTableWrapper>
-          <SubTable rowData={rowData} />
+          {Object.entries(rowData.labels).map(([key, value]) => (
+            <Card title={key} text={value} />
+          ))}
+          {/* <SubTable rowData={rowData} /> */}
         </SubTableWrapper>
       );
     }
@@ -75,42 +113,14 @@ const Table = ({ headers, data, labels }) => {
   return (
     <TableContainer>
       <TableWrapper>
-        <table>
-          <thead>
-            <tr>
-              {headers.map((header) => (
-                <TableHeader key={header}>{header}</TableHeader>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, index) => (
-              <TableRow key={index} onClick={() => handleRowClick(index)}>
-                {/* {Object.values(row).map((cell, index) => (
-                  <TableData key={index}>{cell}</TableData>
-                ))} */}
-                <TableData>{row.text}</TableData>
-              </TableRow>
-            ))}
-          </tbody>
-        </table>
+        <DataTable columns={headers} data={data} customStyles={customStyles} pagination/>
       </TableWrapper>
-      {getSubTableData()}
-      <BarChartComponent data={labels}/>
-
+      <ChartWrapper>
+        <ChartComponent rawData={data} aspectSentimentData={labels} />
+        {/* {getSubTableData()} */}
+      </ChartWrapper>
     </TableContainer>
   );
-};
-
-Table.propTypes = {
-  headers: PropTypes.arrayOf(PropTypes.string).isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      text: PropTypes.arrayOf(PropTypes.string).isRequired,
-      word_score: PropTypes.arrayOf(PropTypes.number).isRequired,
-      edu_score: PropTypes.arrayOf(PropTypes.number).isRequired,
-    })
-  ).isRequired,
 };
 
 export default Table;

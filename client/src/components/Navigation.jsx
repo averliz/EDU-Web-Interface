@@ -54,7 +54,7 @@ const Navigation = () => {
           <NavMenuLink to="/dashboard">Dashboard</NavMenuLink>
         </NavMenuItem>
         <NavMenuItem>
-          <NavMenuLink to="/tables">Tables</NavMenuLink>
+          <NavMenuLink to="/dashboard-test">Dashboard-test</NavMenuLink>
         </NavMenuItem>
         <NavMenuItem>
           <NavMenuLink to="/forms">Forms</NavMenuLink>
