@@ -10,6 +10,7 @@ import Card from "./components/Card";
 import Form from "./components/Form";
 import Dashboard from "./components/Dashboard";
 import HomePage from "./components/HomePage";
+import SubmitForm from "./components/SubmitForm";
 
 const App = () => {
   const cardData = [
@@ -44,7 +45,7 @@ const App = () => {
             }
           />
           {/* <Route path="/dashboard-test" element={<ApiData test={true} />} /> */}
-          <Route path="/forms" element={<Form />} />
+          <Route path="/forms" element={<SubmitForm />} />
           <Route
             path="/cards"
             element={cardData.map((card, index) => (

@@ -48,14 +48,14 @@ const FormButton = styled.button`
 const FormComponent = () => {
   return (
     <Form>
-      <FormGroup>
+      {/* <FormGroup>
         <FormLabel htmlFor="name">Name</FormLabel>
         <FormInput type="text" id="name" name="name" required />
       </FormGroup>
       <FormGroup>
         <FormLabel htmlFor="email">Email</FormLabel>
         <FormInput type="email" id="email" name="email" required />
-      </FormGroup>
+      </FormGroup> */}
       <FormGroup>
         <FormLabel htmlFor="message">Message</FormLabel>
         <FormTextarea id="message" name="message" required></FormTextarea>
