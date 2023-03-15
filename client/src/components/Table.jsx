@@ -1,19 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 import styled from "styled-components";
-import SubTable from "./SubTable";
-import BarChartComponent from "./BarChartComponent";
 import ChartComponent from "./ChartComponent";
-import Card from "./Card";
 import DataTable from "react-data-table-component";
 
 const TableContainer = styled.div`
-  width: 100%;
-  display: flex;
+  width: 50%;
+  // display: flex;
   justify-content: space-between;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  // padding: 0rem 1rem 0rem 0rem;
+  padding: 0 0.5rem;
+  border: 1px solid #c9c9c9;
 `;
 
 const TableWrapper = styled.div`
@@ -89,36 +85,22 @@ const customStyles = {
 };
 
 const Table = ({ headers, data, labels }) => {
-  const [selectedRow, setSelectedRow] = useState(null);
+  // const [selectedRow, setSelectedRow] = useState(null);
 
-  const handleRowClick = (index) => {
-    setSelectedRow(index);
-  };
-
-  const getSubTableData = () => {
-    if (selectedRow !== null) {
-      const rowData = data[selectedRow];
-      return (
-        <SubTableWrapper>
-          {Object.entries(rowData.labels).map(([key, value]) => (
-            <Card title={key} text={value} />
-          ))}
-          {/* <SubTable rowData={rowData} /> */}
-        </SubTableWrapper>
-      );
-    }
-    return null;
-  };
+  // const handleRowClick = (index) => {
+  //   setSelectedRow(index);
+  // };
 
   return (
     <TableContainer>
-      <TableWrapper>
-        <DataTable columns={headers} data={data} customStyles={customStyles} pagination/>
-      </TableWrapper>
-      <ChartWrapper>
-        <ChartComponent rawData={data} aspectSentimentData={labels} />
-        {/* {getSubTableData()} */}
-      </ChartWrapper>
+      <DataTable
+        columns={headers}
+        data={data}
+        customStyles={customStyles}
+        pagination
+      />
+      {/* <TableWrapper>
+      </TableWrapper> */}
     </TableContainer>
   );
 };

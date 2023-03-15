@@ -8,8 +8,8 @@ import {
 import Navigation from "./components/Navigation";
 import Card from "./components/Card";
 import Form from "./components/Form";
-import Table from "./components/Table";
-import ApiData from "./components/ApiData";
+import Dashboard from "./components/Dashboard";
+import HomePage from "./components/HomePage";
 
 const App = () => {
   const cardData = [
@@ -27,35 +27,23 @@ const App = () => {
     },
   ];
 
-  const tableHeaders = ["ID", "Name", "Description", "Price"];
-  const tableData = [
-    ["1", "Product 1", "Product Description 1", "$100"],
-    ["2", "Product 2", "Product Description 2", "$200"],
-    ["3", "Product 3", "Product Description 3", "$300"],
-  ];
+
 
   return (
     <Router>
       <Navigation />
       <div className="container-fluid">
         <Routes>
-          <Route path="/" element={<h1>Welcome to SB Admin 2</h1>} />
+          <Route path="/" element={<HomePage/>} />
           <Route
             path="/dashboard"
             element={
               <div>
-                <ApiData test={false} />
+                <Dashboard />
               </div>
             }
           />
-          <Route
-            path="/dashboard-test"
-            element={
-              <div>
-                <ApiData test={true} />
-              </div>
-            }
-          />
+          {/* <Route path="/dashboard-test" element={<ApiData test={true} />} /> */}
           <Route path="/forms" element={<Form />} />
           <Route
             path="/cards"
