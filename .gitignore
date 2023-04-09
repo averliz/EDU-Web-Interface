@@ -1,2 +1,5 @@
 venv/
 /Output.txt
+server/__pycache__
+server/.vscode/
+server/venv/
