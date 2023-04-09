@@ -1,53 +1,90 @@
 import os
 import json
-from fastapi import FastAPI
+from fastapi import FastAPI, Body, HTTPException
+from pydantic import BaseModel
+import requests
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import util
 
-# from fastapi.staticfiles import StaticFiles
+
+SEGBOT_URL = "http://127.0.0.1:8000/api/"
+EDU_URL = "http://127.0.0.1:8001/api/"
+
+class InputText(BaseModel):
+    text: str
 
 
 app = FastAPI()
 # Allow CORS for all origins
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"],
 )
 
 
-# Serve the raw data file
-@app.get("/api/rest-raw-data")
-def get_raw_data():
-    # with open("/path/to/your/raw-data-file", "r") as f:
-    #     data = f.read()
-    # return data
-    file_path = "C:\\Users\\jimmy\\Documents\\GitHub\\FYP-App\\server\\rest_han_reg.raw"
-    json_string = util.convert_to_json(file_path)
-    return json_string
+# Serve raw data
+@app.get("/api/rest-raw-data/{id}")
+def get_raw_data(id: int):
+    file_paths = {
+        1: "C:/Users/jimmy/Documents/GitHub/FYP-App/server/data/rest_han_reg.raw",
+        2: "C:/Users/jimmy/Documents/GitHub/FYP-App/server/data/rest_han_reg_v2.raw",
+    }
 
+    file_path = file_paths.get(id)
+    if file_path:
+        json_string = util.convert_to_json_from_path(file_path)
+        return json_string
+    else:
+        raise HTTPException(status_code=404, detail="Raw data file not found")
 
-@app.get("/api/rest-raw-data-2")
-def get_raw_data():
-    # with open("/path/to/your/raw-data-file", "r") as f:
-    #     data = f.read()
-    # return data
-    file_path = (
-        "C:\\Users\\jimmy\\Documents\\GitHub\\FYP-App\\server\\rest_han_reg_v2.raw"
-    )
-    json_string = util.convert_to_json(file_path)
-    return json_string
+# Take in user review, segment it, run it through the EDU classifier, and return the result
+@app.post("/api/analyze-rest-review")
+def analyze_text(input_text: InputText = Body(...)):
+    print("Text:", input_text.text, flush=True)
 
+    seg_url = SEGBOT_URL + "segbot-segment-service"
+    payload = {"query": input_text.text}
+    headers = {"Content-Type": "application/json"}
 
-# Serve the React frontend
-# app.mount("/", StaticFiles(directory="frontend/build"), name="static")
+    seg_response = requests.post(seg_url, data=json.dumps(payload), headers=headers)
 
-# @app.get("/")
-# def serve_frontend():
-#     return FileResponse("frontend/build/index.html")
+    if seg_response.status_code == 200:
+        seg_data = seg_response.json()
+        # segs = seg_data.get("segs", [])
 
+        edu_url = EDU_URL + "edu-sentiment-analysis-service"
+        edu_payload = seg_data
+        edu_response = requests.post(edu_url, data=json.dumps(edu_payload), headers=headers)
+
+        if edu_response.status_code == 200:
+            edu_data = edu_response.json()
+            result = edu_data
+            result_json_string = util.convert_to_json(result)
+            return result_json_string
+        else:
+            raise HTTPException(status_code=edu_response.status_code, detail="EDU analysis API request failed")
+    else:
+        raise HTTPException(status_code=seg_response.status_code, detail="Segmentation API request failed")
+
+# Take in user review, segment it, and return the segments
+@app.post("/api/segment-rest-review")
+def segment_text(input_text: InputText = Body(...)):
+    print("Text:", input_text.text, flush=True)
+
+    url = SEGBOT_URL + "segbot-segment-service"
+    payload = {"query": input_text.text}
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
+
+    if response.status_code == 200:
+        segs_response = response.json()
+        # segs = segs_response.get("segs", [])
+        return segs_response
+    else:
+        raise HTTPException(status_code=response.status_code, detail="API request failed")
+
+# uvicorn main:app --host localhost --port 5000
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="localhost", port=5000)
