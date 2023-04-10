@@ -66,4 +66,17 @@ EDU-Web-Interface is a sentiment analysis platform that follows a microservices-
 - EDU-Segmentation-API Microservice: Segments raw review text into sentences. https://github.com/averliz/EDU-Segmentation-API
 - EDU-Sentiment-API Microservice: Performs sentiment analysis on the segmented sentences. GitHub Repository https://github.com/averliz/EDU-Sentiment-API 
 
+## Updating Submodules
+
+To ensure that all submodules in the project are up-to-date and synchronized with their upstream repositories, run the following command:
+```
+git submodule update --init --recursive
+```
+
+This command performs the following actions:
+
+Initializes any uninitialized submodules, setting up the necessary Git configuration files and preparing the submodule directories for fetching their contents.
+Updates the submodule(s) to the latest commit in their respective repositories by fetching the latest changes and updating the submodule's working tree to the appropriate commit.
+Applies the update process recursively to any nested submodules within the current submodule(s), ensuring that all nested submodules are initialized and updated as well.
+Remember to run this command regularly to keep all submodules in the project updated and in sync with their upstream repositories.
 
