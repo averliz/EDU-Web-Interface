@@ -67,7 +67,7 @@ const HomePage = ({}) => {
         <LinkList className="links">
           <ListItem>
             <Link
-              href={"https://example.com/paper.pdf"}
+              href={"https://arxiv.org/abs/2202.02535"}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -76,7 +76,7 @@ const HomePage = ({}) => {
           </ListItem>
           <ListItem>
             <Link
-              href={"https://github.com/username/sentiment-analysis-research"}
+              href={"https://github.com/Ting005/EDU_Attentions"}
               target="_blank"
               rel="noopener noreferrer"
             >

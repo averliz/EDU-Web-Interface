@@ -1,23 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import { TextField, Button } from "@mui/material";
 import styled from "styled-components";
-
-// const FormContainer = styled.div`
-//   margin-top: 2rem;
-// `;
-
-// const ResultContainer = styled.div`
-//   margin-top: 2rem;
-//   border: 1px solid #ccc;
-//   border-radius: 8px;
-//   padding: 1rem;
-// `;
-
-// const HighlightedText = styled.span`
-//   background-color: yellow;
-// `;
+import apiService from "../api/apiService";
+import ReviewResult from "./ReviewResult";
+import { parseResponseData } from "../util/DataParsing";
 
 const FormContainer = styled.div`
   margin-top: 2rem;
@@ -29,7 +16,8 @@ const FormContainer = styled.div`
 const ResultContainer = styled.div`
   margin-top: 2rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 0px;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -40,7 +28,8 @@ const HighlightedText = styled.span`
   background-color: yellow;
 `;
 
-const SubmitForm = () => {
+
+const SubmitReviewForm = () => {
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -54,8 +43,10 @@ const SubmitForm = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/analyze", { text: inputText });
-      setResult(response.data);
+      const response = await apiService.postReview(inputText);
+      const responseData = JSON.parse(response)
+      const parsedData = parseResponseData(responseData)
+      setResult(parsedData);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -66,7 +57,7 @@ const SubmitForm = () => {
   return (
     <FormContainer>
       <h3>Enter your review for sentiment analysis:</h3>
-      <br/>
+      <br />
       <form onSubmit={handleSubmit}>
         <TextField
           label="Review"
@@ -77,12 +68,12 @@ const SubmitForm = () => {
           value={inputText}
           onChange={handleChange}
           sx={{
-            minWidth: '600px', // Set the minimum width for the TextField
-            marginBottom: '1rem', // Add some margin to separate the TextField from the Button
+            minWidth: "600px", // Set the minimum width for the TextField
+            marginBottom: "1rem", // Add some margin to separate the TextField from the Button
           }}
         />
         <br />
-        <br/>
+        <br />
         <Button
           type="submit"
           variant="contained"
@@ -94,28 +85,15 @@ const SubmitForm = () => {
         </Button>
       </form>
 
-      {loading && (
-        <ThreeDots color="#00BFFF" height={80} width={80} />
-      )}
-
+      {loading && <ThreeDots color="#00BFFF" height={80} width={80} />}
       {result && (
         <ResultContainer>
           <h4>Results:</h4>
-          <p>Sentiment: {result.sentiment}</p>
-          <p>
-            Processed Text:{" "}
-            <span
-              dangerouslySetInnerHTML={{
-                __html: result.highlightedText
-                  .replace(/<highlight>/g, "<HighlightedText>")
-                  .replace(/<\/highlight>/g, "</HighlightedText>"),
-              }}
-            />
-          </p>
+          <ReviewResult result={result} />
         </ResultContainer>
       )}
     </FormContainer>
   );
 };
 
-export default SubmitForm;
+export default SubmitReviewForm;

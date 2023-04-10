@@ -73,33 +73,6 @@ const getBarColor = (label) => {
   }
 };
 
-// const transformData = (data) => {
-//   // Extract all the unique values from the input data
-//   const uniqueValues = new Set();
-//   for (const key in data) {
-//     data[key].forEach((value) => uniqueValues.add(value));
-//   }
-
-//   // Create the datasets array
-//   const datasets = [];
-//   uniqueValues.forEach((value) => {
-//     const dataCounts = [];
-//     for (const key in data) {
-//       const count = data[key].filter((val) => val === value).length;
-//       dataCounts.push(count);
-//     }
-//     datasets.push({
-//       label: value,
-//       data: dataCounts,
-//       backgroundColor: getBarColor(value),
-//     });
-//   });
-
-//   // Create the final object with the keys and datasets
-//   const labels = Object.keys(data);
-//   return { labels, datasets };
-// };
-
 const obtainEduByAspSentiment = (rawData, aspIndex) => {
   const filteredIndices = [];
   rawData.forEach((obj, outerIndex) => {

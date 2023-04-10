@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Radio, RadioGroup, FormControlLabel } from "@mui/material";
+import { FormHelperText, MenuItem, Select, FormControl } from "@mui/material";
 import Table from "./Table";
 import apiService from "../api/apiService";
 import styled from "styled-components";
 import ChartComponent from "./ChartComponent";
-
-const ChartWrapper = styled.div`
-  display: inline-block;
-  position: relative;
-  width: 50%;
-`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,11 +18,44 @@ const Wrapper = styled.div`
   }
 `;
 
-const RadioGroupWrapper = styled.div`
+const DropdownGroupWrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 20px 0;
+  padding-left: 10px;
+`;
+
+const StyledFormControl = styled(FormControl)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 20px;
+
+  .MuiFormHelperText-root {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  .MuiSelect-root {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #333;
+  }
+
+  .MuiSelect-selectMenu {
+    padding: 10px 24px 10px 16px;
+  }
+
+  .MuiMenuItem-root {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #333;
+  }
 `;
 
 const getBarColor = (label) => {
@@ -45,13 +72,11 @@ const getBarColor = (label) => {
 };
 
 const transformToChartData = (data) => {
-  // Extract all the unique values from the input data
   const uniqueValues = new Set();
   for (const key in data) {
     data[key].forEach((value) => uniqueValues.add(value));
   }
 
-  // Create the datasets array
   const datasets = [];
   uniqueValues.forEach((value) => {
     const dataCounts = [];
@@ -130,24 +155,22 @@ const Dashboard = ({}) => {
 
   return (
     <div>
-      <RadioGroupWrapper>
-        <RadioGroup
-          aria-label="data-options"
-          value={selectedOption}
-          onChange={handleChange}
-        >
-          <FormControlLabel
-            value="hard"
-            control={<Radio />}
-            label="Rest14 - Hard"
-          />
-          <FormControlLabel
-            value="test"
-            control={<Radio />}
-            label="Rest14 - Test"
-          />
-        </RadioGroup>
-      </RadioGroupWrapper>
+      <DropdownGroupWrapper>
+        <StyledFormControl>
+          <FormHelperText id="choose-dataset-label">
+            Choose Dataset:
+          </FormHelperText>
+          <Select
+            labelId="choose-dataset-label"
+            id="choose-dataset"
+            value={selectedOption}
+            onChange={handleChange}
+          >
+            <MenuItem value="hard">Rest14 - Hard</MenuItem>
+            <MenuItem value="test">Rest14 - Test</MenuItem>
+          </Select>
+        </StyledFormControl>
+      </DropdownGroupWrapper>
       {isLoading ? (
         <p>Loading...</p>
       ) : (

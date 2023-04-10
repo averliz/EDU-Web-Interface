@@ -54,11 +54,11 @@ const Navigation = () => {
           <NavMenuLink to="/dashboard">Dashboard</NavMenuLink>
         </NavMenuItem>
         <NavMenuItem>
-          <NavMenuLink to="/forms">Try It Out!</NavMenuLink>
+          <NavMenuLink to="/forms">Analyze Your Review!</NavMenuLink>
         </NavMenuItem>
-        <NavMenuItem>
+        {/* <NavMenuItem>
           <NavMenuLink to="/cards">Cards</NavMenuLink>
-        </NavMenuItem>
+        </NavMenuItem> */}
       </NavList>
     </NavContainer>
   );
