@@ -6,8 +6,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import Card from "./components/Card";
-import Form from "./components/Form";
 import Dashboard from "./components/Dashboard";
 import HomePage from "./components/HomePage";
 import SubmitReviewForm from "./components/SubmitReviewForm";
@@ -27,15 +25,7 @@ const App = () => {
               </div>
             }
           />
-          {/* <Route path="/dashboard-test" element={<ApiData test={true} />} /> */}
           <Route path="/forms" element={<SubmitReviewForm />} />
-          {/* <Route
-            path="/cards"
-            element={cardData.map((card, index) => (
-              <Card key={index} title={card.title} text={card.text} />
-            ))}
-          /> */}
-          {/* Add a default route that redirects to the home page */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

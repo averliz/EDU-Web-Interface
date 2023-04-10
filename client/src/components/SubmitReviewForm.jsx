@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Snackbar } from "@mui/material";
 import styled from "styled-components";
 import apiService from "../api/apiService";
 import ReviewResult from "./ReviewResult";
 import { parseResponseData } from "../util/DataParsing";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { Toast } from "react-bootstrap";
+import "bootswatch/dist/lux/bootstrap.min.css";
 
 const FormContainer = styled.div`
   margin-top: 2rem;
@@ -24,15 +28,19 @@ const ResultContainer = styled.div`
   align-items: center;
 `;
 
-const HighlightedText = styled.span`
-  background-color: yellow;
+const ToastWrapper = styled.div`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
 `;
-
 
 const SubmitReviewForm = () => {
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [open, setOpen] = React.useState(false);
 
   const handleChange = (event) => {
     setInputText(event.target.value);
@@ -44,15 +52,38 @@ const SubmitReviewForm = () => {
 
     try {
       const response = await apiService.postReview(inputText);
-      const responseData = JSON.parse(response)
-      const parsedData = parseResponseData(responseData)
+      const responseData = JSON.parse(response);
+      const parsedData = parseResponseData(responseData);
       setResult(parsedData);
     } catch (error) {
-      console.error("Error:", error);
+      setError("That is not a valid review. Please try again!");
+      setOpen(true);
+      // console.error("Error:", error);
     }
 
     setLoading(false);
   };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <FormContainer>
@@ -79,6 +110,7 @@ const SubmitReviewForm = () => {
           variant="contained"
           color="primary"
           disabled={!inputText || loading}
+          size="large"
           sx={{ marginTop: 1 }}
         >
           Analyze
@@ -86,11 +118,16 @@ const SubmitReviewForm = () => {
       </form>
 
       {loading && <ThreeDots color="#00BFFF" height={80} width={80} />}
-      {result && (
-        <ResultContainer>
-          <h4>Results:</h4>
-          <ReviewResult result={result} />
-        </ResultContainer>
+      {result && <ReviewResult result={result} />}
+      {error && (
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          open={open}
+          autoHideDuration={4000}
+          onClose={handleClose}
+          message={error}
+          action={action}
+        />
       )}
     </FormContainer>
   );

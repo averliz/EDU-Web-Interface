@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Button as BootstrapButton } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootswatch/dist/lux/bootstrap.min.css";
 
 const HighlightedText = styled.span`
   background-color: ${({ isHighlighted }) =>
@@ -9,8 +9,7 @@ const HighlightedText = styled.span`
 `;
 
 const LabelButton = styled(BootstrapButton)`
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
 `;
 
 const Wrapper = styled.div`
@@ -18,6 +17,27 @@ const Wrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
+const Card = styled.div`
+  border-radius: 0rem;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+  width: 600px;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  background-color: white;
+`;
+
+const CardHeader = styled.div`
+  background-color: #32383e;
+  color: white;
+  font-weight: 600;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+`;
+
+const CardBody = styled.div`
+  padding: 1.25rem;
+`;
 
 const ReviewResult = ({ result }) => {
   const [highlightedIndex, setHighlightedIndex] = useState(null);
@@ -43,31 +63,42 @@ const ReviewResult = ({ result }) => {
   const segments = result.raw_text;
 
   return (
-    <Wrapper>
-      <p>
-        {segments.map((segment, index) => (
-          <React.Fragment key={index}>
-            <HighlightedText isHighlighted={highlightedIndex === index}>
-              {segment}
-            </HighlightedText>
-            {index < segments.length - 1 && " "}
-          </React.Fragment>
-        ))}
-      </p>
-
-      <div>
-        {Object.entries(result.labels).map(([aspect, sentiment], index) => (
-          <LabelButton
-            key={index}
-            variant={sentiment === "positive" ? "success" : "danger"}
-            onClick={() => handleClick(eduScoreIndexes[index][0])}
-            className="mx-1"
-          >
-            {`${aspect}: ${sentiment}`}
-          </LabelButton>
-        ))}
-      </div>
-    </Wrapper>
+    <Card>
+      <CardHeader>Review Result</CardHeader>
+      <CardBody>
+        <Wrapper>
+          <div>
+            {Object.entries(result.labels).map(([aspect, sentiment], index) => (
+              <LabelButton
+                key={index}
+                variant={
+                  sentiment === "positive"
+                    ? "success"
+                    : sentiment === "negative"
+                    ? "danger"
+                    : "info"
+                }
+                onClick={() => handleClick(eduScoreIndexes[index][0])}
+                className="mx-1"
+              >
+                {`${aspect}: ${sentiment}`}
+              </LabelButton>
+            ))}
+          </div>
+          <br />
+          <p class="card-text">
+            {segments.map((segment, index) => (
+              <React.Fragment key={index}>
+                <HighlightedText isHighlighted={highlightedIndex === index}>
+                  {segment}
+                </HighlightedText>
+                {index < segments.length - 1 && " "}
+              </React.Fragment>
+            ))}
+          </p>
+        </Wrapper>
+      </CardBody>
+    </Card>
   );
 };
 
