@@ -7,8 +7,6 @@ EDU-Web-Interface is a sentiment analysis platform that follows a microservices-
 - [Installation](#installation)
 - [Usage](#usage)
 - [Microservices](#microservices)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Prerequisites
 - Python 3.9 or later
