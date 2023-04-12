@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { FormHelperText, MenuItem, Select, FormControl } from "@mui/material";
-import Table from "./Table";
-import apiService from "../api/apiService";
+import { FormControl, MenuItem, Select } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import apiService from "../api/apiService";
 import ChartComponent from "./ChartComponent";
+import Table from "./Table";
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 
   > div:first-child {
     width: 40%;
@@ -58,17 +60,11 @@ const StyledFormControl = styled(FormControl)`
   }
 `;
 
-const getBarColor = (label) => {
-  switch (label) {
-    case "positive":
-      return "rgba(151, 227, 194, 0.7)";
-    case "negative":
-      return "rgba(246, 156, 158, 0.7)";
-    case "neutral":
-      return "rgba(170, 210, 236, 0.7)";
-    default:
-      return "rgba(170, 210, 236, 0.7)";
-  }
+
+const sentimentColors = {
+  positive: "rgba(151, 227, 194, 0.7)", // Green
+  negative: "rgba(246, 156, 158, 0.7)", // Red
+  neutral: "rgba(170, 210, 236, 0.7)" // Blue
 };
 
 const transformToChartData = (data) => {
@@ -87,7 +83,7 @@ const transformToChartData = (data) => {
     datasets.push({
       label: value,
       data: dataCounts,
-      backgroundColor: getBarColor(value),
+      backgroundColor: sentimentColors[value],
     });
   });
 
@@ -157,9 +153,7 @@ const Dashboard = ({}) => {
     <div>
       <DropdownGroupWrapper>
         <StyledFormControl>
-          <FormHelperText id="choose-dataset-label">
-            Choose Dataset:
-          </FormHelperText>
+          <h4 id="choose-dataset-label">Choose Dataset:</h4>
           <Select
             labelId="choose-dataset-label"
             id="choose-dataset"
@@ -176,7 +170,6 @@ const Dashboard = ({}) => {
       ) : (
         <Wrapper>
           <Table headers={headers} data={data} labels={dataLabels} />
-
           <ChartComponent
             key={selectedOption}
             rawData={data}

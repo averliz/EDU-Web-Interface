@@ -1,18 +1,17 @@
-import React, { useRef, useState, useEffect } from "react";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
-  Title,
-  Tooltip,
+  CategoryScale,
+  Chart as ChartJS,
   Legend,
+  LinearScale,
+  Title,
+  Tooltip
 } from "chart.js";
+import React, { useRef, useState } from "react";
 import { Bar, getElementAtEvent } from "react-chartjs-2";
 import DataTable from "react-data-table-component";
 import Highlighter from "react-highlight-words";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -47,30 +46,6 @@ export const options = {
       text: "Sentiment Analysis",
     },
   },
-};
-
-// const StyledHighlighter = styled.Highlighter`
-//   background-color: ${(props) =>
-//     props.sentiment === "positive"
-//       ? "rgba(151, 227, 194)"
-//       : props.sentiment === "positive"
-//       ? "rgba(246, 156, 158)"
-//       : props.sentiment === "positive"
-//       ? "rgba(170, 210, 236)"
-//       : "rgb(255, 243, 205)"};
-// `;
-
-const getBarColor = (label) => {
-  switch (label) {
-    case "positive":
-      return "rgba(151, 227, 194, 0.7)";
-    case "negative":
-      return "rgba(246, 156, 158, 0.7)";
-    case "neutral":
-      return "rgba(170, 210, 236, 0.7)";
-    default:
-      return "rgba(170, 210, 236, 0.7)";
-  }
 };
 
 const obtainEduByAspSentiment = (rawData, aspIndex) => {
@@ -121,46 +96,15 @@ const CustomCell = ({ row }) => (
       highlightClassName="SentimentHighlighter"
       searchWords={row.textToHighlight}
       textToHighlight={row.text}
-      autoEscape
+      autoEscape={true}
     />
   </div>
 );
 
-const segmentHighlighter = {
-  id: "segmentHighlighter",
-  beforeDatasetsDraw(chart, args, pluginOptions) {
-    const {
-      data,
-      ctx,
-      tooltip,
-      chartArea: { top, height },
-      scales: { x, y },
-    } = chart;
-
-    ctx.save();
-    const segmentWidth = x.width / data.labels.length;
-
-    if (tooltip._active[0]) {
-      const xCoor =
-        x.getPixelForValue(tooltip._active[0].index) - segmentWidth / 2;
-      ctx.fillStyle = "rgba(0,0,0,0.5)";
-      ctx.fillRect(xCoor, top, segmentWidth, height);
-    }
-  },
-};
-
 const ChartComponent = ({ rawData, chartData, selectedOption }) => {
   const chartRef = useRef();
-  // const [chartData, setChartData] = useState(null);
   const [tableData, setTableData] = useState(null);
   const [colTitle, setColTitle] = useState("");
-  const location = useLocation();
-
-
-  // useEffect(() => {
-  //   var chartData = transformData(aspectSentimentData);
-  //   setChartData(chartData);
-  // }, []);
 
   const onClick = (event) => {
     const elem = getElementAtEvent(chartRef.current, event);
@@ -214,11 +158,7 @@ const ChartComponent = ({ rawData, chartData, selectedOption }) => {
             onClick={onClick}
             ref={chartRef}
             options={{ maintainAspectRatio: true }}
-            // key={location.pathname}
-            // plugins={[segmentHighlighter]}
-          >
-            {/* {" "} */}
-          </Bar>
+          ></Bar>
         ) : (
           "Loading..."
         )}
@@ -226,7 +166,12 @@ const ChartComponent = ({ rawData, chartData, selectedOption }) => {
       <div>
         {tableData ? (
           <TableWrapper>
-            <DataTable columns={columns} data={tableData} pagination />
+            <DataTable
+              columns={columns}
+              data={tableData}
+              pagination
+              highlightOnHover
+            />
           </TableWrapper>
         ) : (
           ""

@@ -1,67 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import styled from "styled-components";
-import ChartComponent from "./ChartComponent";
 import DataTable from "react-data-table-component";
+import styled from "styled-components";
+import RowReviewCard from "./RowReviewCard";
 
 const TableContainer = styled.div`
-  width: 50%;
+  // width: 50%;
   // display: flex;
   justify-content: space-between;
   padding: 0 0.5rem;
   border: 1px solid #c9c9c9;
-`;
-
-const TableWrapper = styled.div`
-  width: 50%;
-  padding: 0 0.5rem;
-  border: 1px solid #c9c9c9;
-`;
-
-const TableHeader = styled.th`
-  padding: 0.75rem;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-`;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f8f9fa;
-  }
-  cursor: pointer;
-  &:focus {
-    background-color: #105b72c2;
-  }
-  &:hover {
-    background-color: rgba(170, 210, 236, 0.6);
-  }
-`;
-
-const TableData = styled.td`
-  padding: 0.75rem;
-  overflow: clip;
-  text-overflow: ellipsis;
-  border-right: 1px solid #ddd;
-  &:last-child {
-    border-right: none;
-  }
-`;
-
-const SubTableWrapper = styled.div`
-  // margin: 1rem;
-`;
-
-const SubWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: sticky;
-`;
-
-const ChartWrapper = styled.div`
-  display: inline-block;
-  position: relative;
-  width: 100%;
 `;
 
 const customStyles = {
@@ -84,24 +32,72 @@ const customStyles = {
   },
 };
 
-const Table = ({ headers, data, labels }) => {
-  // const [selectedRow, setSelectedRow] = useState(null);
+const conditionalRowStyles = [
+  {
+    when: (row) => row.toggleSelected === true,
+    style: {
+      backgroundColor: "rgb(236, 236, 236)",
+      userSelect: "none",
+    },
+  },
+];
 
-  // const handleRowClick = (index) => {
-  //   setSelectedRow(index);
-  // };
+const Table = ({ headers, data }) => {
+  const [tableData, setTableData] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const parseRowData = data.map((row) => {
+    return {
+      ...row,
+      toggleSelected: false,
+    };
+  });
+
+  useEffect(() => {
+    setTableData(parseRowData);
+  }, []);
+
+  const handleRowClick = (row) => {
+    const updatedData = tableData.map((item) => {
+      if (row.text === item.text) {
+        // Clicked row
+        return {
+          ...item,
+          toggleSelected: !item.toggleSelected,
+        };
+      } else if (item.toggleSelected) {
+        // Previously selected row
+        return {
+          ...item,
+          toggleSelected: false,
+        };
+      }
+      return item;
+    });
+  
+    // Set the selectedRow state to the clicked row if it is not already selected, otherwise set it to null
+    setSelectedRow((prevState) => (prevState && prevState.text === row.text ? null : row));
+    setTableData(updatedData);
+  };
 
   return (
-    <TableContainer>
-      <DataTable
-        columns={headers}
-        data={data}
-        customStyles={customStyles}
-        pagination
-      />
-      {/* <TableWrapper>
-      </TableWrapper> */}
-    </TableContainer>
+    <div>
+      {selectedRow && <RowReviewCard result={selectedRow} />}
+      <TableContainer>
+        {tableData && (
+          <DataTable
+            columns={headers}
+            data={tableData}
+            customStyles={customStyles}
+            conditionalRowStyles={conditionalRowStyles}
+            onRowClicked={handleRowClick}
+            highlightOnHover
+            pointerOnHover
+            pagination
+          />
+        )}
+      </TableContainer>
+    </div>
   );
 };
 
