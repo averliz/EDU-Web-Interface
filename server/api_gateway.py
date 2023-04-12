@@ -34,7 +34,8 @@ def segment_rest_review(*, payload: dict):
     url = SERVER_URL + "segment-rest-review"
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, json=payload, headers=headers)
-    return response.json()
+    segs_response = response.json()
+    return segs_response
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=4000)

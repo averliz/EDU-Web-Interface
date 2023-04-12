@@ -80,7 +80,6 @@ def segment_text(input_text: InputText = Body(...)):
 
     if response.status_code == 200:
         segs_response = response.json()
-        # segs = segs_response.get("segs", [])
         return segs_response
     else:
         raise HTTPException(status_code=response.status_code, detail="API request failed")
