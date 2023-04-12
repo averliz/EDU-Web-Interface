@@ -5,8 +5,6 @@ export function parseResponseData(responseData) {
 
   if (queryData) {
     const processedData = processQueryData(queryData);
-    const text = processedData.text;
-    const segs = [];
 
     return processedData;
   } else {
@@ -31,6 +29,7 @@ function processQueryData(obj) {
     asp_true: obj.asp_true,
   };
 }
+
 const DataParsing = () => {
   return <div></div>;
 };

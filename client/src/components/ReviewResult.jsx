@@ -5,7 +5,7 @@ import "bootswatch/dist/lux/bootstrap.min.css";
 
 const HighlightedText = styled.span`
   background-color: ${({ isHighlighted }) =>
-    isHighlighted ? "yellow" : "inherit"};
+    isHighlighted ? "rgb(252, 239, 220)" : "inherit"};
 `;
 
 const LabelButton = styled(BootstrapButton)`
@@ -13,14 +13,14 @@ const LabelButton = styled(BootstrapButton)`
 `;
 
 const Wrapper = styled.div`
-  width: 600px;
+  min-width: 600px;
   margin-bottom: 1rem;
 `;
 
 const Card = styled.div`
   border-radius: 0rem;
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
-  width: 600px;
+  min-width: 600px;
   margin-top: 2rem;
   margin-bottom: 1rem;
   background-color: white;
@@ -86,7 +86,7 @@ const ReviewResult = ({ result }) => {
             ))}
           </div>
           <br />
-          <p class="card-text">
+          <p>
             {segments.map((segment, index) => (
               <React.Fragment key={index}>
                 <HighlightedText isHighlighted={highlightedIndex === index}>

@@ -7,7 +7,6 @@ import ReviewResult from "./ReviewResult";
 import { parseResponseData } from "../util/DataParsing";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { Toast } from "react-bootstrap";
 import "bootswatch/dist/lux/bootstrap.min.css";
 
 const FormContainer = styled.div`
@@ -17,30 +16,12 @@ const FormContainer = styled.div`
   align-items: center;
 `;
 
-const ResultContainer = styled.div`
-  margin-top: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 0px;
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const ToastWrapper = styled.div`
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 999;
-`;
-
 const SubmitReviewForm = () => {
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleChange = (event) => {
     setInputText(event.target.value);
@@ -58,7 +39,7 @@ const SubmitReviewForm = () => {
     } catch (error) {
       setError("That is not a valid review. Please try again!");
       setOpen(true);
-      // console.error("Error:", error);
+      setInputText("");
     }
 
     setLoading(false);
