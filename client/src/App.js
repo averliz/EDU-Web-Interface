@@ -9,6 +9,7 @@ import Navigation from "./components/Navigation";
 import Dashboard from "./components/Dashboard";
 import HomePage from "./components/HomePage";
 import SubmitReviewForm from "./components/SubmitReviewForm";
+import SubmitSegmentForm from "./components/SubmitSegmentForm";
 
 const App = () => {
   return (
@@ -18,14 +19,15 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
-            path="/dashboard"
+            path="/explore"
             element={
               <div>
                 <Dashboard />
               </div>
             }
           />
-          <Route path="/forms" element={<SubmitReviewForm />} />
+          <Route path="/analyze" element={<SubmitReviewForm />} />
+          <Route path="/segment" element={<SubmitSegmentForm />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

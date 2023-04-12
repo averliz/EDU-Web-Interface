@@ -6,7 +6,7 @@ const Navigation = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
         <NavLink className="navbar-brand" to="/">
-          EDU Web-Interface
+          EDU Web Interface
         </NavLink>
         <button
           className="navbar-toggler"
@@ -35,7 +35,7 @@ const Navigation = () => {
               <NavLink
                 className="nav-link"
                 activeclassname="active"
-                to="/dashboard"
+                to="/explore"
               >
                 Explore
               </NavLink>
@@ -44,7 +44,7 @@ const Navigation = () => {
               <NavLink
                 className="nav-link"
                 activeclassname="active"
-                to="/forms"
+                to="/analyze"
               >
                 Analyze
               </NavLink>
