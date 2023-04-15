@@ -41,8 +41,6 @@ def get_raw_data(id: int):
 # Take in user review, segment it, run it through the EDU classifier, and return the result
 @app.post("/api/analyze-rest-review")
 def analyze_text(input_text: InputText = Body(...)):
-    print("Text:", input_text.text, flush=True)
-
     seg_url = SEGBOT_URL + "segbot-segment-service"
     payload = {"query": input_text.text}
     headers = {"Content-Type": "application/json"}
@@ -51,8 +49,6 @@ def analyze_text(input_text: InputText = Body(...)):
 
     if seg_response.status_code == 200:
         seg_data = seg_response.json()
-        # segs = seg_data.get("segs", [])
-
         edu_url = EDU_URL + "edu-sentiment-analysis-service"
         edu_payload = seg_data
         edu_response = requests.post(edu_url, data=json.dumps(edu_payload), headers=headers)
@@ -70,8 +66,6 @@ def analyze_text(input_text: InputText = Body(...)):
 # Take in user review, segment it, and return the segments
 @app.post("/api/segment-rest-review")
 def segment_text(input_text: InputText = Body(...)):
-    print("Text:", input_text.text, flush=True)
-
     url = SEGBOT_URL + "segbot-segment-service"
     payload = {"query": input_text.text}
     headers = {"Content-Type": "application/json"}
