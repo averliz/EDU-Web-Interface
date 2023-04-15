@@ -70,7 +70,7 @@ EDU-Web-Interface is a sentiment analysis platform that follows a microservices-
 
 To ensure that all submodules in the project are up-to-date and synchronized with their upstream repositories, run the following command:
 ```
-git submodule update --init --recursive
+git submodule update --remote --merge
 ```
 
 This command performs the following actions:
