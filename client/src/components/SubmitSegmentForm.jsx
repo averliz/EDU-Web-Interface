@@ -35,7 +35,7 @@ const SubmitSegmentForm = () => {
     //   const responseData = JSON.parse(response);
       setResult(response);
     } catch (error) {
-      setError("That is not a valid review. Please try again!");
+      setError("Unable to process the review. Please try again.");
       setOpen(true);
       setInputText("");
     }

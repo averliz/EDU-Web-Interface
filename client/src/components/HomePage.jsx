@@ -87,7 +87,25 @@ const HomePage = ({}) => {
 
         <div>
           <Subtitle>Abstract</Subtitle>
-          <Paragraph>This is a sample abstract</Paragraph>
+          <Paragraph>
+            In linguistics, a sentence can have multiple aspects which may each
+            carry their individual sentiments. When the aspects in these
+            sentences carry differing sentiment polarities, traditional
+            sentiment analysis model's accuracy are often adversely affected.
+            Often, such sentences that carry multiple aspects are expressed
+            through multiple clauses with each clause carrying a unitary
+            sentiment toward a single aspect. In this work, we aim to introduce
+            a web interface that supports considering clause boundaries, which
+            are formally known as elementary discourse units (EDUs), in
+            sentences. This allows our system to leverage on an EDU-Attention
+            model, based on the Attention Mechanism which identifies the
+            sentiment of each clause in the sentence. Our system enables users
+            to observe the overall sentiments toward various identified aspects
+            from a group of texts, specifically reviews. It further enables
+            users to interactively investigate individual textual inputs by
+            providing extractive and abstractive summarisation to display the
+            most meaningful information
+          </Paragraph>
         </div>
       </div>
     </Container>

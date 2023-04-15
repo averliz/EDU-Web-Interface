@@ -1,4 +1,6 @@
-import { FormControl, MenuItem, Select } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { FormControl, MenuItem, Select, Snackbar } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import apiService from "../api/apiService";
@@ -60,11 +62,10 @@ const StyledFormControl = styled(FormControl)`
   }
 `;
 
-
 const sentimentColors = {
   positive: "rgba(151, 227, 194, 0.7)", // Green
   negative: "rgba(246, 156, 158, 0.7)", // Red
-  neutral: "rgba(170, 210, 236, 0.7)" // Blue
+  neutral: "rgba(170, 210, 236, 0.7)", // Blue
 };
 
 const transformToChartData = (data) => {
@@ -98,21 +99,49 @@ const Dashboard = ({}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState("hard");
   const [chartData, setChartData] = useState(null);
+  const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const resData = await apiService.getResData(selectedOption);
-      const { data, dataLabels } = processRawData(resData);
-      setData(data);
-      setDataLabels(dataLabels);
-      setIsLoading(false);
+      try {
+        const resData = await apiService.getResData(selectedOption);
+        const { data, dataLabels } = processRawData(resData);
+        setData(data);
+        setDataLabels(dataLabels);
+        setIsLoading(false);
 
-      const newChartData = transformToChartData(dataLabels);
-      setChartData(newChartData);
+        const newChartData = transformToChartData(dataLabels);
+        setChartData(newChartData);
+      } catch (err) {
+        setError("Unable to load the dataset. Please try again.");
+        setOpen(true);
+      }
     };
 
     fetchData();
   }, [selectedOption]);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
@@ -177,6 +206,16 @@ const Dashboard = ({}) => {
             selectedOption={selectedOption}
           />
         </Wrapper>
+      )}
+      {error && (
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          open={open}
+          autoHideDuration={4000}
+          onClose={handleClose}
+          message={error}
+          action={action}
+        />
       )}
     </div>
   );
